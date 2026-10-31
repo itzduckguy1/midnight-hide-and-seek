@@ -12,6 +12,7 @@
     background:radial-gradient(ellipse at center,rgba(10,14,26,.82),rgba(3,4,9,.97));z-index:10;backdrop-filter:blur(3px)}
   .overlay.hidden{display:none}
   .panel{max-width:720px;width:92%;padding:38px 42px;border:1px solid #22304a;border-radius:18px;
+    max-height:92vh;overflow:auto;
     background:linear-gradient(180deg,rgba(18,24,40,.95),rgba(10,14,24,.97));box-shadow:0 0 80px rgba(40,90,200,.18),inset 0 1px 0 rgba(255,255,255,.05)}
   h1{font-size:44px;letter-spacing:6px;font-weight:800;text-transform:uppercase;
     background:linear-gradient(180deg,#9fd0ff,#3f7bff 60%,#7a4bff);-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -33,6 +34,67 @@
   .lose{color:#ff5d6c;text-shadow:0 0 30px rgba(255,93,108,.4)}
   .stats{display:flex;justify-content:center;gap:34px;margin:20px 0 28px;color:#9fb0d0;font-size:14px}
   .stats b{display:block;text-align:center;color:#e8eefc;font-size:22px;margin-top:4px}
+
+  html,body,canvas{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+
+  /* ---------- touch controls ---------- */
+  #touchUI{position:fixed;inset:0;display:none;z-index:8;pointer-events:none}
+  #touchUI.on{display:block}
+  .stick{position:absolute;width:132px;height:132px;border-radius:50%;pointer-events:none;
+    border:2px solid rgba(140,180,255,.25);
+    background:radial-gradient(circle,rgba(30,45,70,.30),rgba(10,16,26,.12))}
+  .stick .ring{position:absolute;inset:38px;border-radius:50%;border:1px dashed rgba(140,180,255,.18)}
+  #stickMove{left:20px;bottom:24px}
+  #stickAim{right:20px;bottom:24px}
+  .knob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#a9d3ff,#3f6fd0 70%);
+    box-shadow:0 0 18px rgba(90,150,255,.45);pointer-events:none;will-change:transform}
+  .stick .lbl{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:9px;letter-spacing:2px;color:#5d7499}
+  .tbtn{position:absolute;pointer-events:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:11px;letter-spacing:1px;color:#dce9ff;background:rgba(20,30,50,.78);
+    border:1.5px solid rgba(110,160,230,.45);touch-action:none;text-align:center;line-height:1.15}
+  .tbtn:active,.tbtn.hit{background:rgba(80,135,225,.85);transform:scale(.94)}
+  #btnDash{right:166px;bottom:158px;width:62px;height:62px}
+  #btnParry{right:96px;bottom:196px;width:62px;height:62px}
+  #btnUse{right:170px;bottom:78px;width:62px;height:62px}
+
+  /* ---------- vent picker ---------- */
+  #ventPanel{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9;
+    background:rgba(3,6,12,.74);backdrop-filter:blur(2px)}
+  #ventPanel.on{display:flex}
+  .ventBox{width:min(700px,94%);max-height:86vh;overflow:auto;padding:22px;border:1px solid #2a3a58;border-radius:16px;
+    background:linear-gradient(180deg,#101827,#0a1019);box-shadow:0 0 70px rgba(40,90,200,.25)}
+  .ventBox h3{font-size:14px;letter-spacing:4px;color:#8fb6ff;text-align:center;margin-bottom:5px}
+  .ventBox p{text-align:center;color:#65789c;font-size:11px;margin-bottom:16px}
+  .ventGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .vbtn{padding:14px 10px;border-radius:11px;border:1px solid #2f4468;background:linear-gradient(180deg,#1a2740,#131c2e);
+    color:#cfe0ff;font-weight:700;font-size:13px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:inherit}
+  .vbtn:hover{background:linear-gradient(180deg,#26406b,#1a2a44);border-color:#4b76bd}
+  .vbtn small{display:block;color:#6f86ad;font-weight:600;font-size:10px;margin-top:4px;letter-spacing:0;text-transform:none}
+  .vbtn.here{opacity:.35;pointer-events:none}
+  .ventCancel{display:block;margin:16px auto 0;padding:10px 26px;border-radius:9px;border:1px solid #2f4468;
+    background:#131c2e;color:#94a7c7;font-weight:700;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:inherit}
+  .ventCancel:hover{background:#1a2740}
+
+  @media (max-width: 640px), (max-height: 520px) {
+    .panel{padding:24px 20px;max-height:94vh}
+    h1{font-size:26px;letter-spacing:3px}
+    .tag{font-size:11px;margin-bottom:16px}
+    .grid{grid-template-columns:1fr;gap:5px;margin-bottom:18px}
+    .key{font-size:12px}
+    kbd{min-width:26px;padding:3px 6px;font-size:10px}
+    .btn{padding:13px 38px;font-size:14px}
+    .hint{font-size:11px;margin-top:12px}
+    .big{font-size:24px}
+    .stats{gap:18px;font-size:11px;margin:14px 0 18px}
+    .stats b{font-size:17px}
+    .stick{width:112px;height:112px}
+    .knob{width:48px;height:48px;margin:-24px 0 0 -24px}
+    #btnDash{right:140px;bottom:140px;width:56px;height:56px}
+    #btnParry{right:78px;bottom:172px;width:56px;height:56px}
+    #btnUse{right:144px;bottom:68px;width:56px;height:56px}
+    .tbtn{font-size:10px}
+  }
 </style>
 </head>
 <body>
@@ -53,8 +115,9 @@
       <div class="key"><kbd>Esc</kbd> Pause</div>
     </div>
     <button class="btn" id="playBtn">Play</button>
-    <div class="hint">Survive <b style="color:#9fd0ff">120 seconds</b>. Hide in lockers, crawl through vents,<br>
-      shoot the seeker down, or parry its strike at the last moment.</div>
+    <div class="hint">Survive <b style="color:#9fd0ff">120 seconds</b>. Hide in lockers, pick any vent destination,<br>
+      shoot the seeker down, or parry its strike at the last moment.<br>
+      <span style="color:#7f90b3">On phone: left stick moves, right stick aims &amp; fires, buttons for dash / parry / use.</span></div>
   </div>
 </div>
 
@@ -68,6 +131,23 @@
       <div>Vents used<b id="statVent">0</b></div>
     </div>
     <button class="btn" id="againBtn">Play Again</button>
+  </div>
+</div>
+
+<div id="touchUI">
+  <div class="stick" id="stickMove"><div class="ring"></div><div class="knob" id="knobMove"></div><div class="lbl">MOVE</div></div>
+  <div class="stick" id="stickAim"><div class="ring"></div><div class="knob" id="knobAim"></div><div class="lbl">AIM / FIRE</div></div>
+  <div class="tbtn" id="btnDash">DASH</div>
+  <div class="tbtn" id="btnParry">PARRY</div>
+  <div class="tbtn" id="btnUse">USE</div>
+</div>
+
+<div id="ventPanel">
+  <div class="ventBox">
+    <h3>VENT NETWORK</h3>
+    <p>Pick a destination — the seeker keeps hunting while you choose</p>
+    <div class="ventGrid" id="ventGrid"></div>
+    <button class="ventCancel" id="ventCancel">CANCEL</button>
   </div>
 </div>
 
@@ -109,8 +189,9 @@ const tc = (tx, ty) => ({ x: tx * T + T / 2, y: ty * T + T / 2 });
 const hideSpots = [[3,8],[10,3],[23,3],[30,7],[3,20],[10,14],
                    [17,29],[27,24],[32,24],[39,28],[34,9],[39,12],[32,19],[39,15]]
   .map(([a,b]) => ({ ...tc(a,b), type: 'locker', searchT: 0, warm: 0 }));
+const VENT_NAMES = ['Cargo Bay','Med Bay','Reactor','Cafeteria','Storage','Admin','Engine'];
 const vents = [[7,3],[24,7],[4,16],[20,25],[37,25],[36,15],[37,10]]
-  .map(([a,b]) => ({ ...tc(a,b), type: 'vent' }));
+  .map(([a,b], i) => ({ ...tc(a,b), type: 'vent', name: VENT_NAMES[i] }));
 const ammoBoxes = [[8,5],[24,4],[35,26],[18,24]]
   .map(([a,b]) => ({ ...tc(a,b), taken: false, respawn: 0 }));
 
@@ -216,13 +297,14 @@ const player = {
 };
 
 const seeker = {
-  x: 0, y: 0, r: 15, hp: 140, maxHp: 140,
+  x: 0, y: 0, r: 15, hp: 180, maxHp: 180,
   state: 'patrol', stunT: 0, atkT: 0, atkCd: 0,
   path: [], pathT: 0, target: null, lastSeen: null,
   sees: 0, legPhase: 0, ang: 0, searchT: 0, downT: 0, hitFlash: 0
 };
 
 let bullets = [], particles = [], floaters = [];
+let dashQueued = false;
 
 function reset() {
   const p = tc(6, 5);
@@ -242,6 +324,8 @@ function reset() {
   state.time = SURVIVE; state.elapsed = 0;
   state.stats = { dmg: 0, hides: 0, vents: 0 };
   state.shake = 0; state.flash = 0; state.msg = 'The seeker is coming...'; state.msgT = 3;
+  closeVent();
+  dashQueued = false;
 }
 
 // ---------- input ----------
@@ -249,7 +333,7 @@ const keys = {}, mouse = { x: 0, y: 0, down: false, rdown: false };
 addEventListener('keydown', e => {
   keys[e.code] = true;
   if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyE','KeyR'].includes(e.code)) e.preventDefault();
-  if (e.code === 'Escape' && state.running && !state.over) togglePause();
+  if (e.code === 'Escape' && state.running && !state.over) { if (ventOpen) closeVent(); else togglePause(); }
   if (e.code === 'KeyE' && state.running && !state.over && !state.paused) interact();
   if (e.code === 'KeyR' && state.running && !state.over) { if (player.ammo < player.maxAmmo && player.reloadT <= 0) { player.reloadT = 1.0; sfx(220,.07,'triangle'); } }
 });
@@ -257,6 +341,7 @@ addEventListener('keyup', e => { keys[e.code] = false; });
 addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 addEventListener('mousedown', e => {
   if (!state.running || state.over || state.paused) return;
+  if (e.target && e.target.closest && e.target.closest('.tbtn, #ventPanel, .overlay')) return;
   if (e.button === 0) { mouse.down = true; attack(); }
   if (e.button === 2) { mouse.rdown = true; parry(); }
 });
@@ -264,6 +349,77 @@ addEventListener('mouseup', e => { if (e.button === 0) mouse.down = false; if (e
 addEventListener('contextmenu', e => e.preventDefault());
 document.getElementById('playBtn').onclick = start;
 document.getElementById('againBtn').onclick = start;
+
+// ---------- touch controls (mobile) ----------
+const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints || 0) > 0 || /[?&]touch=1/.test(location.search);
+const STICK_R = 44;
+const sticks = {
+  move: { active: false, id: null, dx: 0, dy: 0, cx: 0, cy: 0,
+          el: document.getElementById('stickMove'), knob: document.getElementById('knobMove') },
+  aim:  { active: false, id: null, dx: 0, dy: 0, cx: 0, cy: 0,
+          el: document.getElementById('stickAim'),  knob: document.getElementById('knobAim') }
+};
+if (isTouch) document.getElementById('touchUI').classList.add('on');
+
+function updateStick(s, x, y) {
+  let dx = x - s.cx, dy = y - s.cy;
+  const l = Math.hypot(dx, dy) || 1;
+  const cl = Math.min(l, STICK_R);
+  const nx = dx / l, ny = dy / l;
+  s.dx = nx * (cl / STICK_R);
+  s.dy = ny * (cl / STICK_R);
+  s.knob.style.transform = 'translate(' + (nx * cl) + 'px,' + (ny * cl) + 'px)';
+}
+function stickStart(e) {
+  if (!state.running || state.over || state.paused) return;
+  for (const t of e.changedTouches) {
+    const tgt = t.target;
+    if (tgt && tgt.closest && tgt.closest('.tbtn, #ventPanel, .overlay')) continue;
+    const s = (t.clientX < window.innerWidth * 0.5) ? sticks.move : sticks.aim;
+    if (s.active) continue;
+    s.active = true; s.id = t.identifier;
+    const r = s.el.getBoundingClientRect();
+    s.cx = r.left + r.width / 2; s.cy = r.top + r.height / 2;
+    updateStick(s, t.clientX, t.clientY);
+  }
+  e.preventDefault();
+}
+function stickMove(e) {
+  for (const t of e.changedTouches) {
+    for (const k in sticks) {
+      const s = sticks[k];
+      if (s.active && s.id === t.identifier) updateStick(s, t.clientX, t.clientY);
+    }
+  }
+  if (sticks.move.active || sticks.aim.active) e.preventDefault();
+}
+function stickEnd(e) {
+  for (const t of e.changedTouches) {
+    for (const k in sticks) {
+      const s = sticks[k];
+      if (s.active && s.id === t.identifier) {
+        s.active = false; s.id = null; s.dx = 0; s.dy = 0;
+        s.knob.style.transform = 'translate(0,0)';
+      }
+    }
+  }
+}
+addEventListener('touchstart', stickStart, { passive: false });
+addEventListener('touchmove', stickMove, { passive: false });
+addEventListener('touchend', stickEnd, { passive: false });
+addEventListener('touchcancel', stickEnd, { passive: false });
+
+function bindButton(id, fn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); fn(); });
+}
+bindButton('btnDash', () => { dashQueued = true; });
+bindButton('btnParry', () => parry());
+bindButton('btnUse', () => interact());
+document.getElementById('ventCancel').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); closeVent(); });
+document.getElementById('ventPanel').addEventListener('pointerdown', e => e.stopPropagation());
+
 function start() {
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('endScreen').classList.add('hidden');
@@ -276,6 +432,38 @@ function togglePause() {
   else { state.msgT = 0; }
 }
 
+// ---------- vent network ----------
+let ventOpen = false, ventOrigin = null;
+function openVent(v) {
+  ventOpen = true; ventOrigin = v;
+  const grid = document.getElementById('ventGrid');
+  grid.innerHTML = '';
+  vents.forEach((nv, i) => {
+    const b = document.createElement('button');
+    b.className = 'vbtn' + (nv === v ? ' here' : '');
+    const away = Math.round(dist(v.x, v.y, nv.x, nv.y) / T);
+    b.innerHTML = nv.name + '<small>' + (nv === v ? 'you are here' : away + ' tiles away') + '</small>';
+    b.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); ventJumpTo(i); });
+    grid.appendChild(b);
+  });
+  document.getElementById('ventPanel').classList.add('on');
+  sfx(300,.06,'triangle',.04);
+}
+function closeVent() {
+  ventOpen = false; ventOrigin = null;
+  document.getElementById('ventPanel').classList.remove('on');
+}
+function ventJumpTo(i) {
+  const nv = vents[i];
+  if (!ventOrigin || nv === ventOrigin) { closeVent(); return; }
+  closeVent();
+  player.x = nv.x; player.y = nv.y;
+  player.vx = player.vy = 0; player.invT = .4;
+  state.stats.vents++; state.msg = 'Vent jump!'; state.msgT = 1;
+  state.shake = Math.max(state.shake, 5);
+  sfx(520,.07,'sawtooth',.055); setTimeout(()=>sfx(700,.06,'sawtooth',.04),55);
+}
+
 // ---------- interact ----------
 function nearest(list, maxD) {
   let best = null, bd = maxD;
@@ -283,22 +471,15 @@ function nearest(list, maxD) {
   return best;
 }
 function interact() {
+  if (ventOpen) { closeVent(); return; }
   if (player.hidden) { player.hidden = null; player.hiddenT = 0; state.msg = 'Left your hiding spot'; state.msgT = 1.4; sfx(300,.06,'triangle'); return; }
   const h = nearest(hideSpots, 58);
   if (h && !h.searchT) {
     player.hidden = h; statsHide(); state.msg = 'Hidden — press E to leave'; state.msgT = 1.8;
     sfx(180,.12,'sine',.07); return;
   }
-  const v = nearest(vents, 58);
-  if (v) {
-    const i = vents.indexOf(v);
-    const nv = vents[(i + 1) % vents.length];
-    player.x = nv.x; player.y = nv.y; player.invT = .55;
-    state.stats.vents++; state.msg = 'Vent jump!'; state.msgT = 1;
-    state.shake = Math.max(state.shake, 4);
-    sfx(520,.07,'sawtooth',.055); setTimeout(()=>sfx(700,.06,'sawtooth',.04), 55);
-    return;
-  }
+  const v = nearest(vents, 64);
+  if (v) { openVent(v); return; }
   state.msg = 'Nothing to use here'; state.msgT = 1;
 }
 function statsHide() { state.stats.hides++; }
@@ -313,17 +494,27 @@ function attack() {
       vx: Math.cos(a)*980, vy: Math.sin(a)*980, life: .9 });
     state.shake = Math.max(state.shake, 3);
     sfx(760,.05,'square',.06);
-    // noise attracts
-    if (seeker.state !== 'chase') { seeker.lastSeen = { x: player.x, y: player.y }; seeker.searchT = 2.5; }
+    // noise attracts the seeker to where you fired from
+    if (seeker.state !== 'chase' && seeker.state !== 'down') {
+      seeker.state = 'search';
+      seeker.lastSeen = { x: player.x, y: player.y };
+      seeker.searchT = 4;
+      seeker.sees = 0;
+    }
   } else {
     player.swingT = .3; player.swingCd = .45; player.swingHit = false;
     sfx(320,.08,'sawtooth',.05);
   }
 }
 function parry() {
-  if (player.parryCd > 0) return;
-  player.parryT = .3; player.parryCd = .8;
+  if (player.parryCd > 0 || ventOpen) return;
+  player.parryT = .16; player.parryCd = 1.4;
   sfx(880,.06,'triangle',.06);
+}
+function parryFacing() {
+  const a = Math.atan2(seeker.y - player.y, seeker.x - player.x);
+  const da = Math.abs(((a - player.ang + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+  return da < 1.75; // must be facing roughly toward the seeker
 }
 function hurtPlayer(dmg, fromX, fromY) {
   if (player.invT > 0 || player.hidden) return;
@@ -342,8 +533,8 @@ function hurtSeeker(dmg) {
   addFloater(seeker.x, seeker.y - 40, '-' + dmg, '#9fd0ff');
   sfx(200,.08,'square',.06);
   if (seeker.hp <= 0) {
-    seeker.hp = 0; seeker.state = 'down'; seeker.downT = 8; seeker.path = [];
-    state.msg = 'Seeker downed! 8 seconds'; state.msgT = 2.2;
+    seeker.hp = 0; seeker.state = 'down'; seeker.downT = 6; seeker.path = [];
+    state.msg = 'Seeker downed! 6 seconds'; state.msgT = 2.2;
     state.shake = Math.max(state.shake, 14); sfx(90,.4,'sawtooth',.1);
   }
 }
@@ -400,6 +591,8 @@ function updatePlayer(dt) {
     if (player.reloadT <= 0) { player.ammo = player.maxAmmo; sfx(600,.06,'triangle',.05); }
   }
 
+  if (ventOpen) { player.vx = player.vy = 0; return; }
+
   if (player.hidden) {
     player.hiddenT += dt;
     player.vx = player.vy = 0;
@@ -413,18 +606,25 @@ function updatePlayer(dt) {
   if (keys['KeyS'] || keys['ArrowDown']) iy++;
   if (keys['KeyA'] || keys['ArrowLeft']) ix--;
   if (keys['KeyD'] || keys['ArrowRight']) ix++;
-  const len = Math.hypot(ix, iy);
-  if (len) { ix /= len; iy /= len; }
+  // analog touch stick overrides keyboard
+  if (isTouch && sticks.move.active) {
+    const m = Math.hypot(sticks.move.dx, sticks.move.dy);
+    if (m > .12) { ix = sticks.move.dx; iy = sticks.move.dy; }
+  }
+  let len = Math.hypot(ix, iy);
+  if (len > 1) { ix /= len; iy /= len; len = 1; }
 
   // dash
-  if (player.dashCd <= 0 && player.dashT <= 0 && (keys['ShiftLeft'] || keys['ShiftRight'])) {
+  if (player.dashCd <= 0 && player.dashT <= 0 && (keys['ShiftLeft'] || keys['ShiftRight'] || dashQueued)) {
+    dashQueued = false;
     let dx = ix, dy = iy;
-    if (!len) { dx = Math.cos(player.ang); dy = Math.sin(player.ang); }
+    if (len < .2) { dx = Math.cos(player.ang); dy = Math.sin(player.ang); }
     player.vx = dx * 720; player.vy = dy * 720;
     player.dashT = .16; player.dashCd = 1.1; player.invT = .22;
     sfx(420,.09,'sawtooth',.05);
     state.shake = Math.max(state.shake, 4);
   }
+  dashQueued = false;
 
   if (player.dashT > 0) {
     player.dashT -= dt;
@@ -439,9 +639,22 @@ function updatePlayer(dt) {
   resolveCircle(player);
   player.legPhase += Math.hypot(player.vx, player.vy) * dt * .03;
 
-  // facing
-  const worldMouse = screenToWorld(mouse.x, mouse.y);
-  player.ang = Math.atan2(worldMouse.y - player.y, worldMouse.x - player.x);
+  // facing / aiming
+  if (isTouch) {
+    if (sticks.aim.active) {
+      const m = Math.hypot(sticks.aim.dx, sticks.aim.dy);
+      if (m > .18) {
+        player.ang = Math.atan2(sticks.aim.dy, sticks.aim.dx);
+        if (m > .55) attack();       // twin-stick: push the aim stick to fire
+      }
+    } else if (len > .1) {
+      player.ang = Math.atan2(iy, ix);
+    }
+  } else {
+    const worldMouse = screenToWorld(mouse.x, mouse.y);
+    player.ang = Math.atan2(worldMouse.y - player.y, worldMouse.x - player.x);
+    if (mouse.down) attack();        // hold to keep firing
+  }
 
   // katana swing hit
   if (player.swingT > 0 && !player.swingHit && player.swingT < .19) {
@@ -476,8 +689,8 @@ function updateSeeker(dt) {
 
   // detection
   const pd = dist(player.x, player.y, seeker.x, seeker.y);
-  let detectR = 340;
-  if (player.crouch) detectR *= .55;
+  let detectR = 400;
+  if (player.crouch) detectR *= .6;
   if (player.hidden) detectR = 0;
   let canSee = false;
   if (detectR > 0 && pd < detectR && los(player.x, player.y, seeker.x, seeker.y)) {
@@ -495,7 +708,7 @@ function updateSeeker(dt) {
     seeker.sees = Math.max(0, seeker.sees - dt);
     if (seeker.state === 'chase' && seeker.sees <= 0) {
       seeker.state = 'search';
-      seeker.searchT = 4.5;
+      seeker.searchT = 6;
       seeker.target = seeker.lastSeen;
     }
   }
@@ -510,7 +723,7 @@ function updateSeeker(dt) {
     const spot = player.hidden;
     if (dist(seeker.x, seeker.y, spot.x, spot.y) < 78) {
       spot.searchT += dt;
-      if (spot.searchT > 1.15) {
+      if (spot.searchT > 0.9) {
         player.hidden = null; player.hiddenT = 0;
         player.invT = .3; player.hurtT = .3;
         hurtPlayer(12, seeker.x, seeker.y);
@@ -558,7 +771,7 @@ function updateSeeker(dt) {
   }
   const ang = Math.atan2(ty - seeker.y, tx - seeker.x);
   seeker.ang = ang;
-  const spd = seeker.state === 'chase' ? 168 : 108;
+  const spd = seeker.state === 'chase' ? 186 : 126;
   if (seeker.state !== 'chase' || dist(seeker.x, seeker.y, player.x, player.y) > 46) {
     seeker.x += Math.cos(ang) * spd * dt;
     seeker.y += Math.sin(ang) * spd * dt;
@@ -575,10 +788,10 @@ function updateSeeker(dt) {
   if (seeker.atkT > 0) {
     seeker.atkT -= dt;
     if (seeker.atkT <= 0) {
-      seeker.atkCd = 1.05;
+      seeker.atkCd = 0.8;
       if (dist(seeker.x, seeker.y, player.x, player.y) < 78 && !player.hidden) {
-        if (player.parryT > 0) {
-          seeker.stunT = 2.8;
+        if (player.parryT > 0 && parryFacing()) {
+          seeker.stunT = 1.6;
           state.shake = Math.max(state.shake, 12);
           state.msg = 'PARRIED!'; state.msgT = 1.2;
           particles.push(...burst(player.x, player.y - 20, '#ffe66b', 16));
@@ -587,7 +800,7 @@ function updateSeeker(dt) {
         } else if (player.invT > 0) {
           addFloater(player.x, player.y - 40, 'DODGE', '#5df0a8');
         } else {
-          hurtPlayer(22, seeker.x, seeker.y);
+          hurtPlayer(28, seeker.x, seeker.y);
         }
       }
     }
@@ -1037,7 +1250,7 @@ function drawHUD() {
     const h = nearest(hideSpots, 58), v = nearest(vents, 58);
     let prompt = null;
     if (h) prompt = 'E — hide in locker';
-    else if (v) prompt = 'E — take vent';
+    else if (v) prompt = 'E — vent network';
     if (prompt) {
       ctx.fillStyle = 'rgba(10,16,28,.85)';
       const w = ctx.measureText(prompt).width;
@@ -1113,7 +1326,9 @@ function loop(now) {
 requestAnimationFrame(loop);
 
 // debug hook (used for automated testing only)
-window.__mhs = { state, player, seeker, hideSpots, vents, keys, grid, solid, tick: update };
+window.__mhs = { state, player, seeker, hideSpots, vents, keys, grid, solid, tick: update,
+  openVent, closeVent, ventJumpTo, interact, parry, attack, parryFacing, sticks, isTouch,
+  get ventOpen() { return ventOpen; } };
 
 })();
 </script>
